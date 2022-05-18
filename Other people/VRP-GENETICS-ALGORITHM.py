@@ -379,7 +379,7 @@ w7 = [410,121,141,248,93,242,199,999]
 distances = {0:w0,1:w1,2:w2,3:w3,4:w4,5:w5,6:w6,7:w7}
 
 capacity_trucks = 60
-trucks = ['truck','truck']
+trucks = ['truck1','truck2','truck3']
 num_trucks = len(trucks)
 frontier = "---------"
 
