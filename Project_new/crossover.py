@@ -1,5 +1,6 @@
 from random import randint, uniform, sample
-
+import numpy as np
+import random
 
 def single_point_co(p1, p2):
     """Implementation of single point crossover.
@@ -17,6 +18,32 @@ def single_point_co(p1, p2):
     offspring2 = p2[:co_point] + p1[co_point:]
 
     return offspring1, offspring2
+
+
+def multipoint_crossover(p1, p2, n_trucks):
+    p1_flat = [item for sublist in p1 for item in sublist]
+    p2_flat = [item for sublist in p2 for item in sublist]
+
+    dividers = np.sort(np.append(random.sample(range(1, len(p1_flat) - 2), n_trucks - 1), len(p1_flat)))
+
+    offspring_1 = []
+    offspring_2 = []
+
+    i = 0
+    for index, point in enumerate(dividers):
+        p1_section = p1_flat[i:point]
+        p2_section = p2_flat[i:point]
+
+        if index % 2 == 0:
+            offspring_1.append(p1_section)
+            offspring_2.append(p2_section)
+        else:
+            offspring_1.append(p2_section)
+            offspring_2.append(p1_section)
+
+        i = point
+
+    return offspring_1, offspring_2
 
 
 def cycle_co(p1, p2):
