@@ -1,18 +1,18 @@
 
 cities = [
-    "New York",
-    "Los Angeles",
-    "Chicago",
-    "Minneapolis",
-    "Denver",
-    "Dallas",
-    "Seattle",
-    "Boston",
-    "San Francisco",
-    "St Louis",
-    "Houston",
-    "Phoenix",
-    "Salt Lake City",
+    "New York", #0
+    "Los Angeles", #1
+    "Chicago", #2
+    "Minneapolis", #3
+    "Denver", #4
+    "Dallas", #5
+    "Seattle", #6
+    "Boston", #7
+    "San Francisco", #8
+    "St Louis", #9
+    "Houston", #10
+    "Phoenix", #11
+    "Salt Lake City", #12
 ]
 
 distance_matrix = [

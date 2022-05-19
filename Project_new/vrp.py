@@ -11,7 +11,7 @@ from ind_pop import Population, Individual
 from selection import tournament
 from crossover import multipoint_crossover
 from mutation import swap_mutation
-
+from reparations import reparations
 
 
 def get_fitness(self):
@@ -47,17 +47,13 @@ def get_fitness(self):
 Individual.get_fitness = get_fitness
 
 
-print(len(distance_matrix[0])-1)
-print([i for i in range(1,len(distance_matrix[0]))])
-
-
 pop = Population(
     size=20,
     sol_size=len(distance_matrix[0])-1,
     valid_set=[i for i in range(1,len(distance_matrix[0]))],
     replacement=False,
     optim="min",
-    n_trucks=3,
+    n_trucks=2,
 )
 
 pop.evolve(
@@ -65,34 +61,9 @@ pop.evolve(
     select=tournament,
     crossover=multipoint_crossover,
     mutate=swap_mutation,
+    reparations=reparations,
     co_p=0.9,
     mu_p=0.1,
     elitism=True
 )
-
-#
-# if __name__ == "__main__":
-#
-#     n_trucks = 3
-#     n_cities = 13
-#
-#     cities = [i for i in range(1, n_cities)]
-#     trucks = [i for i in range(1, n_trucks+1)]
-#
-#     np.random.shuffle(cities)
-#     routes = np.array_split(cities, n_trucks)
-#
-#     np.random.shuffle(cities)
-#     routes_2 = np.array_split(cities, n_trucks)
-#
-#     print(routes)
-#     print(routes_2)
-#
-#     o1, o2 = multipoint_crossover(routes, routes_2, n_trucks)
-#
-#     print(o1)
-#     print(o2)
-#     mutated = swap_mutation(o1)
-#
-#     print(mutated)
 

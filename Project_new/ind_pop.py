@@ -41,26 +41,27 @@ class Individual:
         self.representation[position] = value
 
     def __repr__(self):
-        return f"Individual(size={len(self.representation)}); Fitness: {self.fitness}"
+        return f"Individual(size={len(self.representation)}); Fitness: {self.fitness}; Routes: {self.representation}"
 
 
 class Population:
-    def __init__(self, size, optim, n_trucks, **kwargs):
+    def __init__(self, size, optim, n_trucks, valid_set, **kwargs):
         self.individuals = []
         self.size = size
         self.optim = optim
         self.n_trucks = n_trucks
+        self.valid_set = valid_set
         for _ in range(size):
             self.individuals.append(
                 Individual(
                     size=kwargs["sol_size"],
                     replacement=kwargs["replacement"],
-                    valid_set=kwargs["valid_set"],
-                    n_trucks= n_trucks
+                    valid_set=valid_set,
+                    n_trucks= n_trucks,
                 )
             )
 
-    def evolve(self, gens, select, crossover, mutate, co_p, mu_p, elitism):
+    def evolve(self, gens, select, crossover, reparations, mutate, co_p, mu_p, elitism):
         for gen in range(gens):
             new_pop = []
 
@@ -75,6 +76,10 @@ class Population:
                     # Crossover
                     if random() < co_p:
                         offspring1, offspring2 = crossover(parent1,parent2,self.n_trucks)
+
+                        #Reparataion
+                        offspring1 = reparations(offspring1,self.valid_set)
+                        offspring2 = reparations(offspring2,self.valid_set)
                     else:
                         offspring1, offspring2 = parent1.representation, parent2.representation
 
