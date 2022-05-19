@@ -30,7 +30,6 @@ def get_fitness(self):
                 previous = self.representation[truck][route - 1]
             distance = distance_matrix[previous][current]
             truck_distance += distance
-            print(f"Current: {current} Previous: {previous} distance: {distance}")
 
         # Add distance from last delivery spot to depot
 
@@ -38,12 +37,9 @@ def get_fitness(self):
         previous = self.representation[truck][-1:][0]
         distance = distance_matrix[previous][current]
         truck_distance += distance
-        print(f"Current: {current} Previous: {previous} distance: {distance}")
-        print(truck_distance)
 
         fitness += truck_distance
 
-    print(f"Final fitness: {fitness}")
 
     return fitness
 

@@ -28,8 +28,20 @@ class Individual:
 
     def get_representation(self,valid_set,n_trucks):
         np.random.shuffle(valid_set)
-        routes = np.array_split(valid_set, n_trucks)
+        routes = np.stack(np.array_split(valid_set, n_trucks)).tolist()
         return routes
+
+    def __len__(self):
+        return len(self.representation)
+
+    def __getitem__(self, position):
+        return self.representation[position]
+
+    def __setitem__(self, position, value):
+        self.representation[position] = value
+
+    def __repr__(self):
+        return f"Individual(size={len(self.representation)}); Fitness: {self.fitness}"
 
 
 class Population:
@@ -64,7 +76,7 @@ class Population:
                     if random() < co_p:
                         offspring1, offspring2 = crossover(parent1,parent2,self.n_trucks)
                     else:
-                        offspring1, offspring2 = parent1, parent2
+                        offspring1, offspring2 = parent1.representation, parent2.representation
 
                     #Mutation
                     if random() < mu_p:
@@ -90,6 +102,16 @@ class Population:
                     print(f'Best Individual: {max(self, key=attrgetter("fitness"))}')
                 elif self.optim == "min":
                     print(f'Best Individual: {min(self, key=attrgetter("fitness"))}')
+
+
+    def __len__(self):
+        return len(self.individuals)
+
+    def __getitem__(self, position):
+        return self.individuals[position]
+
+    def __repr__(self):
+        return f"Population(size={len(self.individuals)}, individual_size={len(self.individuals[0])})"
 
 if __name__ == '__main__':
     ind = Individual(

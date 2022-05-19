@@ -21,8 +21,8 @@ def single_point_co(p1, p2):
 
 
 def multipoint_crossover(p1, p2, n_trucks):
-    p1_flat = [item for sublist in p1 for item in sublist]
-    p2_flat = [item for sublist in p2 for item in sublist]
+    p1_flat = [item for sublist in p1.representation for item in sublist]
+    p2_flat = [item for sublist in p2.representation for item in sublist]
 
     dividers = np.sort(np.append(random.sample(range(1, len(p1_flat) - 2), n_trucks - 1), len(p1_flat)))
 
@@ -150,7 +150,8 @@ def arithmetic_co(p1, p2):
 
 
 if __name__ == '__main__':
-    p1, p2 = [9, 8, 4, 5, 6, 7, 1, 3, 2, 10], [8, 7, 1, 2, 3, 10, 9, 5, 4, 6]
+    #p1, p2 = [9, 8, 4, 5, 6, 7, 1, 3, 2, 10], [8, 7, 1, 2, 3, 10, 9, 5, 4, 6]
     #p1, p2 = [1, 2, 3, 4, 5, 6, 7, 8, 9], [9, 3, 7, 8, 2, 6, 5, 1, 4]
     #p1, p2 = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], [0.3, 0.2, 0.3, 0.2, 0.3, 0.2, 0.3, 0.2, 0.3]
-    o1, o2 = pmx_co(p1, p2)
+    p1, p2 = [[6, 10, 5, 7], [9, 2, 3, 8], [11, 12, 1, 4]],[[2, 11, 5, 8], [6, 1, 12, 10], [7, 9, 4, 3]]
+    o1, o2 = multipoint_crossover(p1, p2,3)
