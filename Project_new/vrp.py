@@ -13,6 +13,8 @@ from crossover import multipoint_crossover
 from mutation import swap_mutation
 from reparations import reparations
 
+DEPOT = 4
+
 
 def get_fitness(self):
     fitness = 0
@@ -25,7 +27,7 @@ def get_fitness(self):
             current = self.representation[truck][route]
 
             if route == 0:
-                previous = 0
+                previous = DEPOT
             else:
                 previous = self.representation[truck][route - 1]
             distance = distance_matrix[previous][current]
@@ -33,7 +35,7 @@ def get_fitness(self):
 
         # Add distance from last delivery spot to depot
 
-        current = 0
+        current = DEPOT
         previous = self.representation[truck][-1:][0]
         distance = distance_matrix[previous][current]
         truck_distance += distance
@@ -50,10 +52,10 @@ Individual.get_fitness = get_fitness
 pop = Population(
     size=20,
     sol_size=len(distance_matrix[0])-1,
-    valid_set=[i for i in range(1,len(distance_matrix[0]))],
+    valid_set=[0,1,2,3,5,6,7,8,9,10,11,12],#[i for i in range(1,len(distance_matrix[0]))],
     replacement=False,
     optim="min",
-    n_trucks=2,
+    n_trucks=3,
 )
 
 pop.evolve(

@@ -21,6 +21,7 @@ def single_point_co(p1, p2):
 
 
 def multipoint_crossover(p1, p2, n_trucks):
+
     p1_flat = [item for sublist in p1.representation for item in sublist]
     p2_flat = [item for sublist in p2.representation for item in sublist]
 
