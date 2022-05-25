@@ -10,7 +10,7 @@ from data.vrp_data import distance_matrix
 from data.data_vrp_bangladesh import distance_matrix as bangladesh_distance_matrix
 from ind_pop import Population, Individual
 from selection import tournament, fps
-from crossover import multipoint_crossover
+from crossover import multipoint_crossover, single_point_co
 from mutation import swap_mutation, inversion_mutation
 from reparations import reparations
 

@@ -2,7 +2,7 @@ from random import randint, uniform, sample
 import numpy as np
 import random
 
-def single_point_co(p1, p2):
+def single_point_co(p1, p2,n_trucks=None):
     """Implementation of single point crossover.
 
     Args:
@@ -12,12 +12,37 @@ def single_point_co(p1, p2):
     Returns:
         Individuals: Two offspring, resulting from the crossover.
     """
-    co_point = randint(1, len(p1)-2)
+    cutoffs_1 = [0]
+    cutoffs_2 = [0]
 
-    offspring1 = p1[:co_point] + p2[co_point:]
-    offspring2 = p2[:co_point] + p1[co_point:]
+    for route in p1:
+        cutoffs_1.append(len(route) + cutoffs_1[-1:][0])
+    for route in p2:
+        cutoffs_2.append(len(route) + cutoffs_2[-1:][0])
 
-    return offspring1, offspring2
+
+
+    p1_flat = [item for sublist in p1.representation for item in sublist]
+    p2_flat = [item for sublist in p2.representation for item in sublist]
+
+    co_point = randint(1, len(p1_flat)-2)
+
+    offspring1 = p1_flat[:co_point] + p2_flat[co_point:]
+    offspring2 = p2_flat[:co_point] + p1_flat[co_point:]
+
+    result_1 = []
+    for cutoff in range(len(cutoffs_1) - 1):
+        list_slice = p1_flat[cutoffs_1[cutoff]:cutoffs_1[cutoff + 1]]
+        result_1.append(list_slice)
+    #
+
+    result_2 = []
+    for cutoff in range(len(cutoffs_2) - 1):
+        list_slice = p2_flat[cutoffs_2[cutoff]:cutoffs_2[cutoff + 1]]
+        result_2.append(list_slice)
+    #
+
+    return result_1, result_2
 
 
 def multipoint_crossover(p1, p2, n_trucks):
