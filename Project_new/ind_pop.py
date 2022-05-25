@@ -3,6 +3,7 @@ from copy import deepcopy
 from operator import attrgetter
 from random import choice, sample, random
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class Individual:
@@ -51,6 +52,7 @@ class Population:
         self.optim = optim
         self.n_trucks = n_trucks
         self.valid_set = valid_set
+        print(valid_set)
         for _ in range(size):
             self.individuals.append(
                 Individual(
@@ -62,6 +64,7 @@ class Population:
             )
 
     def evolve(self, gens, select, crossover, reparations, mutate, co_p, mu_p, elitism):
+        fitness_info = []
         for gen in range(gens):
             new_pop = []
 
@@ -107,6 +110,10 @@ class Population:
                     print(f'Best Individual: {max(self, key=attrgetter("fitness"))}')
                 elif self.optim == "min":
                     print(f'Best Individual: {min(self, key=attrgetter("fitness"))}')
+                    fitness_info.append(min(self,key=attrgetter("fitness")).fitness)
+
+        plt.plot(fitness_info)
+        plt.show()
 
 
     def __len__(self):
