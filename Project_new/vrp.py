@@ -9,10 +9,11 @@ from mutation import swap_mutation
 from data.vrp_data import distance_matrix
 from data.data_vrp_bangladesh import distance_matrix as bangladesh_distance_matrix
 from ind_pop import Population, Individual
-from selection import tournament, fps
+from selection import tournament, fps, rank
 from crossover import multipoint_crossover, single_point_co
-from mutation import swap_mutation, inversion_mutation
+from mutation import swap_mutation, inversion_mutation, scramble_mutation
 from reparations import reparations
+
 
 DEPOT = 4
 
@@ -55,7 +56,7 @@ pop = Population(
     sol_size=len(distance_matrix[0])-1,
     valid_set=[i for i in range(0,len(distance_matrix[0])) if i is not DEPOT],
     replacement=False,
-    optim="min",
+    optim="max",
     n_trucks=3,
 )
 
@@ -63,7 +64,7 @@ pop.evolve(
     gens=100,
     select=tournament,
     crossover=multipoint_crossover,
-    mutate=inversion_mutation,
+    mutate=scramble_mutation,
     reparations=reparations,
     co_p=0.9,
     mu_p=0.4,
