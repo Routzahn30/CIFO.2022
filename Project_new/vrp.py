@@ -62,9 +62,9 @@ pop = Population(
 
 pop.evolve(
     gens=100,
-    select=tournament,
+    select=rank,
     crossover=multipoint_crossover,
-    mutate=scramble_mutation,
+    mutate=inversion_mutation,
     reparations=reparations,
     co_p=0.9,
     mu_p=0.4,
