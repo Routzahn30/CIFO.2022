@@ -1,18 +1,18 @@
 import crossover
 import random
 import numpy as np
+import matplotlib.pyplot as plt
 from itertools import islice
 from random import randint
 from crossover import multipoint_crossover
 from mutation import swap_mutation
-#from data.vrp_data import distance_matrix
+# from data.vrp_data import distance_matrix
 from data.data_vrp_bangladesh import distance_matrix as distance_matrix
 from ind_pop import Population, Individual
 from selection import tournament, fps, rank
 from crossover import multipoint_crossover, single_point_co, uniform_crossover
 from mutation import swap_mutation, inversion_mutation, scramble_mutation
 from reparations import reparations
-
 
 DEPOT = 4
 
@@ -52,27 +52,39 @@ def get_fitness(self):
 
     return fitness
 
+
 # Monkey patching
 Individual.get_fitness = get_fitness
 
 
-pop = Population(
-    size=300,
-    sol_size=len(distance_matrix[0])-1,
-    valid_set=[i for i in range(0,len(distance_matrix[0])) if i is not DEPOT],
-    replacement=False,
-    optim="min",
-    n_trucks=5,
-)
+N = 3
+best_individuals = []
+for i in range(N):
 
-pop.evolve(
-    gens=300,
-    select=tournament,
-    crossover=single_point_co,
-    mutate=inversion_mutation,
-    reparations=reparations,
-    co_p=0.9,
-    mu_p=0.4,
-    elitism=True
-)
+    pop = Population(
+        size=300,
+        sol_size=len(distance_matrix[0]) - 1,
+        valid_set=[i for i in range(0, len(distance_matrix[0])) if i is not DEPOT],
+        replacement=False,
+        optim="min",
+        n_trucks=5,
+    )
 
+    fitness_info, best_individual = pop.evolve(
+        gens=300,
+        select=tournament,
+        crossover=multipoint_crossover,
+        mutate=inversion_mutation,
+        reparations=reparations,
+        co_p=0.7,
+        mu_p=0.4,
+        elitism=True
+    )
+
+    best_individuals.append(best_individual)
+    plt.plot(fitness_info)
+
+plt.show()
+
+for ind in best_individuals:
+    print(ind)

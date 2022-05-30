@@ -55,7 +55,6 @@ class Population:
         self.optim = optim
         self.n_trucks = n_trucks
         self.valid_set = valid_set
-        print(valid_set)
         for _ in range(size):
             self.individuals.append(
                 Individual(
@@ -110,14 +109,21 @@ class Population:
                 self.individuals = new_pop
 
                 if self.optim == "max":
-                    print(f'Best Individual: {max(self, key=attrgetter("fitness"))}')
+                    print('Best Individual: {min(self, key=attrgetter("fitness"))}')
                     fitness_info.append(min(self,key=attrgetter("fitness")).fitness)
                 elif self.optim == "min":
                     print(f'Best Individual: {min(self, key=attrgetter("fitness"))}')
                     fitness_info.append(min(self,key=attrgetter("fitness")).fitness)
 
         plt.plot(fitness_info)
-        plt.show()
+        #plt.show()
+
+        if self.optim == "max":
+            best_individual = f' --- Best Individual: {max(self, key=attrgetter("fitness"))} \n'
+        if self.optim == "min":
+            best_individual = f' --- Best Individual: {min(self, key=attrgetter("fitness"))} \n'
+
+        return fitness_info, best_individual
 
 
     def __len__(self):
