@@ -66,7 +66,6 @@ def inversion_mutation(individual):
 
     return new_list
 
-    return individual
 
 def scramble_mutation(individual):
     cutoffs = [0]
@@ -95,8 +94,6 @@ def scramble_mutation(individual):
     #
 
     return new_list
-
-    return individual
 
 
 def scramble_mutation1(individual):
