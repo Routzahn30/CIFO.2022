@@ -57,12 +57,12 @@ def get_fitness(self):
 Individual.get_fitness = get_fitness
 
 
-N = 3
+N = 2
 best_individuals = []
 for i in range(N):
 
     pop = Population(
-        size=300,
+        size=1000,
         sol_size=len(distance_matrix[0]) - 1,
         valid_set=[i for i in range(0, len(distance_matrix[0])) if i is not DEPOT],
         replacement=False,
@@ -71,18 +71,20 @@ for i in range(N):
     )
 
     fitness_info, best_individual = pop.evolve(
-        gens=300,
+        gens=600,
         select=tournament,
         crossover=multipoint_crossover,
         mutate=inversion_mutation,
         reparations=reparations,
-        co_p=0.7,
-        mu_p=0.4,
+        co_p=0.8,
+        mu_p=0.3,
         elitism=True
     )
 
     best_individuals.append(best_individual)
     plt.plot(fitness_info)
+    plt.ylabel("Fitness")
+    plt.xlabel("Genes")
 
 for ind in best_individuals:
     print(ind)
