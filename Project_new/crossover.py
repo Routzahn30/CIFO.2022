@@ -2,7 +2,8 @@ from random import randint, uniform, sample
 import numpy as np
 import random
 
-def single_point_co(p1, p2,n_trucks=None):
+
+def single_point_co(p1, p2, n_trucks=None):
     """Implementation of single point crossover.
 
     Args:
@@ -20,25 +21,23 @@ def single_point_co(p1, p2,n_trucks=None):
     for route in p2:
         cutoffs_2.append(len(route) + cutoffs_2[-1:][0])
 
-
-
     p1_flat = [item for sublist in p1.representation for item in sublist]
     p2_flat = [item for sublist in p2.representation for item in sublist]
 
-    co_point = randint(1, len(p1_flat)-2)
+    co_point = randint(1, len(p1_flat) - 2)
 
     offspring1 = p1_flat[:co_point] + p2_flat[co_point:]
     offspring2 = p2_flat[:co_point] + p1_flat[co_point:]
 
     result_1 = []
     for cutoff in range(len(cutoffs_1) - 1):
-        list_slice = p1_flat[cutoffs_1[cutoff]:cutoffs_1[cutoff + 1]]
+        list_slice = offspring1[cutoffs_1[cutoff]:cutoffs_1[cutoff + 1]]
         result_1.append(list_slice)
     #
 
     result_2 = []
     for cutoff in range(len(cutoffs_2) - 1):
-        list_slice = p2_flat[cutoffs_2[cutoff]:cutoffs_2[cutoff + 1]]
+        list_slice = offspring2[cutoffs_2[cutoff]:cutoffs_2[cutoff + 1]]
         result_2.append(list_slice)
     #
 
@@ -46,16 +45,24 @@ def single_point_co(p1, p2,n_trucks=None):
 
 
 def multipoint_crossover(p1, p2, n_trucks):
-
     p1_flat = [item for sublist in p1.representation for item in sublist]
     p2_flat = [item for sublist in p2.representation for item in sublist]
 
+    # Set a number of points equal to the number of trucks - 1
+    # A final point is added equal to the total length of the individual
+    # These points will serve as dividers between trucks
+    # Example: If dividers = [3,9,13]
+    # offspring shape: [[x,x,x][x,x,x,x,x,x],[x,x,x,x]]
     dividers = np.sort(np.append(random.sample(range(1, len(p1_flat) - 2), n_trucks - 1), len(p1_flat)))
 
     offspring_1 = []
     offspring_2 = []
 
     i = 0
+
+    # Cross the parents to create multiple offsprings
+    # offspring1 -> [x,x,x][y,y,y,y,y,y][x,x,x,x]
+    # offspring2 -> [y,y,y][x,x,x,x,x,x][y,y,y,y]
     for index, point in enumerate(dividers):
         p1_section = p1_flat[i:point]
         p2_section = p2_flat[i:point]
@@ -72,62 +79,23 @@ def multipoint_crossover(p1, p2, n_trucks):
     return offspring_1, offspring_2
 
 
-def cycle_co(p1, p2):
-    """Implementation of cycle crossover.
-
-    Args:
-        p1 (Individual): First parent for crossover.
-        p2 (Individual): Second parent for crossover.
-
-    Returns:
-        Individuals: Two offspring, resulting from the crossover.
-    """
-
-    # Offspring placeholders - None values make it easy to debug for errors
-    offspring1 = [None] * len(p1)
-    offspring2 = [None] * len(p2)
-
-    # While there are still None values in offspring, get the first index of
-    # None and start a "cycle" according to the cycle crossover method
-    while None in offspring1:
-        index = offspring1.index(None)
-
-        val1 = p1[index]
-        val2 = p2[index]
-
-        while val1 != val2:
-            offspring1[index] = p1[index]
-            offspring2[index] = p2[index]
-            val2 = p2[index]
-            index = p1.index(val2)
-
-        for element in offspring1:
-            if element is None:
-                index = offspring1.index(None)
-                if offspring1[index] is None:
-                    offspring1[index] = p2[index]
-                    offspring2[index] = p1[index]
-
-    return offspring1, offspring2
-
 def uniform_crossover(p1, p2, n_trucks):
-
     p1_flat = [item for sublist in p1.representation for item in sublist]
     p2_flat = [item for sublist in p2.representation for item in sublist]
     dividers = np.sort(np.append(random.sample(range(1, len(p1_flat) - 2), n_trucks - 1), len(p1_flat)))
 
     offspring_1 = []
     offspring_2 = []
-    number_list = [0,1]
+    number_list = [0, 1]
     # random item from list
-    #print(random.choice(number_list))
+    # print(random.choice(number_list))
     ran = []
-    for i in range(0,len(p1_flat) ):
+    for i in range(0, len(p1_flat)):
         aux = 0
         to_switch = random.choice(number_list)
         ran.append(to_switch)
-        if to_switch == 0 :
-    #         if p1_flat[i] not in p2_flat :
+        if to_switch == 0:
+            #         if p1_flat[i] not in p2_flat :
             aux = p1_flat[i]
             p1_flat[i] = p2_flat[i]
             p2_flat[i] = aux
@@ -148,77 +116,12 @@ def uniform_crossover(p1, p2, n_trucks):
 
         i = point
 
-    return offspring_1,offspring_2
-
-
-def pmx_co(p1, p2):
-    """Implementation of partially matched/mapped crossover.
-
-    Args:
-        p1 (Individual): First parent for crossover.
-        p2 (Individual): Second parent for crossover.
-
-    Returns:
-        Individuals: Two offspring, resulting from the crossover.
-    """
-    co_points = sample(range(len(p1)), 2)
-    co_points.sort()
-
-    # dictionary creation using the segment elements from both parents
-    # the dictionary will be working two ways
-    keys = p1[co_points[0]:co_points[1]] + p2[co_points[0]:co_points[1]]
-    values = p2[co_points[0]:co_points[1]] + p1[co_points[0]:co_points[1]]
-    # segment dictionary
-    segment = {keys[i]: values[i] for i in range(len(keys))}
-
-    # empty offsprings
-    o1 = [None] * len(p1)
-    o2 = [None] * len(p2)
-
-    # where pmx happens
-    def pmx(o, p):
-        for i, element in enumerate(p):
-            # if element not in the segment, copy
-            if element not in segment:
-                o[i] = p[i]
-            # if element in the segment, take the value of the key from
-            # segment/dictionary
-            else:
-                o[i] = segment.get(element)
-        return o
-
-    # repeat the procedure for each offspring
-    o1 = pmx(o1, p1)
-    o2 = pmx(o2, p2)
-    return o1, o2
-
-
-def arithmetic_co(p1, p2):
-    """Implementation of arithmetic crossover.
-
-    Args:
-        p1 (Individual): First parent for crossover.
-        p2 (Individual): Second parent for crossover.
-
-    Returns:
-        Individuals: Two offspring, resulting from the crossover.
-    """
-    # Offspring placeholders - None values make it easy to debug for errors
-    offspring1 = [None] * len(p1)
-    offspring2 = [None] * len(p1)
-    # Set a value for alpha between 0 and 1
-    alpha = uniform(0, 1)
-    # Take weighted sum of two parents, invert alpha for second offspring
-    for i in range(len(p1)):
-        offspring1[i] = p1[i] * alpha + (1 - alpha) * p2[i]
-        offspring2[i] = p2[i] * alpha + (1 - alpha) * p1[i]
-
-    return offspring1, offspring2
+    return offspring_1, offspring_2
 
 
 if __name__ == '__main__':
-    #p1, p2 = [9, 8, 4, 5, 6, 7, 1, 3, 2, 10], [8, 7, 1, 2, 3, 10, 9, 5, 4, 6]
-    #p1, p2 = [1, 2, 3, 4, 5, 6, 7, 8, 9], [9, 3, 7, 8, 2, 6, 5, 1, 4]
-    #p1, p2 = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], [0.3, 0.2, 0.3, 0.2, 0.3, 0.2, 0.3, 0.2, 0.3]
-    p1, p2 = [[6, 10, 5, 7], [9, 2, 3, 8], [11, 12, 1, 4]],[[2, 11, 5, 8], [6, 1, 12, 10], [7, 9, 4, 3]]
-    o1, o2 = multipoint_crossover(p1, p2,3)
+    # p1, p2 = [9, 8, 4, 5, 6, 7, 1, 3, 2, 10], [8, 7, 1, 2, 3, 10, 9, 5, 4, 6]
+    # p1, p2 = [1, 2, 3, 4, 5, 6, 7, 8, 9], [9, 3, 7, 8, 2, 6, 5, 1, 4]
+    # p1, p2 = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], [0.3, 0.2, 0.3, 0.2, 0.3, 0.2, 0.3, 0.2, 0.3]
+    p1, p2 = [[6, 10, 5, 7], [9, 2, 3, 8], [11, 12, 1, 4]], [[2, 11, 5, 8], [6, 1, 12, 10], [7, 9, 4, 3]]
+    o1, o2 = multipoint_crossover(p1, p2, 3)

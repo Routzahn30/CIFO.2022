@@ -29,7 +29,10 @@ class Individual:
 
     def get_representation(self,valid_set,n_trucks):
         np.random.shuffle(valid_set)
-        routes = np.stack(np.array_split(valid_set, n_trucks)).tolist()
+        initial_splits = np.array_split(valid_set, n_trucks)
+        routes = []
+        for array in initial_splits:
+            routes.append(array.tolist())
         return routes
 
     def __len__(self):

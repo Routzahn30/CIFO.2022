@@ -96,21 +96,6 @@ def scramble_mutation(individual):
     return new_list
 
 
-def scramble_mutation1(individual):
-    # Remember where the list was cut
-    cutoffs = []
-    for i in range(0, len(individual)):
-        cutoffs.append(i)
-
-    to_shuffle = random.choice(cutoffs)
-
-    random.shuffle(individual[to_shuffle])
-    # Get a flat list of all the routes
-    # p_flat = [item for sublist in individual for item in sublist]
-    #
-
-    return individual
-
 if __name__ == '__main__':
 
     test = [[14,  2, 12, 11,  1, 18, 19], [8, 13, 15, 16, 20, 10,  4], [17,  9,  7,  6,  3,  5]]

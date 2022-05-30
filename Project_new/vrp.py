@@ -14,35 +14,41 @@ from mutation import swap_mutation, inversion_mutation, scramble_mutation
 from reparations import reparations
 
 
-DEPOT = 0
+DEPOT = 4
 
 
 def get_fitness(self):
     fitness = 0
 
     for truck in range(len(self.representation)):
-        # print(truck)
         truck_distance = 0
-        for route in range(0, len(self.representation[truck])):
-            # print(route)
-            current = self.representation[truck][route]
 
-            if route == 0:
+        # For each point the truck has to travel, the distance to the previous point will be measured
+        for point in range(0, len(self.representation[truck])):
+            current = self.representation[truck][point]
+
+            # If it is the starting point of a route, the previous point will be the depot
+            if point == 0:
                 previous = DEPOT
             else:
-                previous = self.representation[truck][route - 1]
+                previous = self.representation[truck][point - 1]
+
             distance = distance_matrix[previous][current]
+
             truck_distance += distance
 
-        # Add distance from last delivery spot to depot
-
+        # After adding the distance to all points,
+        # the distance of the final point to the depot will be added to the total
         current = DEPOT
+
+        # previous = last point of the truck route
         previous = self.representation[truck][-1:][0]
+
         distance = distance_matrix[previous][current]
         truck_distance += distance
 
+        # Fitness is equal to the total of the distances done by each truck
         fitness += truck_distance
-
 
     return fitness
 
@@ -51,18 +57,18 @@ Individual.get_fitness = get_fitness
 
 
 pop = Population(
-    size=20,
+    size=300,
     sol_size=len(distance_matrix[0])-1,
     valid_set=[i for i in range(0,len(distance_matrix[0])) if i is not DEPOT],
     replacement=False,
     optim="min",
-    n_trucks=3,
+    n_trucks=5,
 )
 
 pop.evolve(
-    gens=100,
+    gens=300,
     select=tournament,
-    crossover=uniform_crossover,
+    crossover=single_point_co,
     mutate=inversion_mutation,
     reparations=reparations,
     co_p=0.9,
