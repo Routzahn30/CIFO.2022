@@ -2,11 +2,12 @@ import crossover
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+from datetime import datetime
 from itertools import islice
 from random import randint
 from crossover import multipoint_crossover
 from mutation import swap_mutation
-# from data.vrp_data import distance_matrix
+#from data.vrp_data import distance_matrix
 from data.data_vrp_bangladesh import distance_matrix as distance_matrix
 from ind_pop import Population, Individual
 from selection import tournament, fps, rank
@@ -14,7 +15,7 @@ from crossover import multipoint_crossover, single_point_co, uniform_crossover
 from mutation import swap_mutation, inversion_mutation, scramble_mutation
 from reparations import reparations
 
-DEPOT = 4
+DEPOT = 0
 
 
 def get_fitness(self):
@@ -56,35 +57,57 @@ def get_fitness(self):
 # Monkey patching
 Individual.get_fitness = get_fitness
 
-
-N = 2
 best_individuals = []
-for i in range(N):
+
+
+#VARIABLES
+
+N_TRIES = 5
+
+SIZE = 200
+N_TRUCKS = 5
+GENS = 100
+OPTIM = "min"
+SELECT = tournament
+CROSSOVER = multipoint_crossover
+MUTATION = inversion_mutation
+CO_P = 0.8
+MU_P = 0.3
+
+image_name = f"N_tries- {N_TRIES},SIZE- {SIZE},N_TRUCKS- {N_TRUCKS},GENES- {GENS},SELECT- {SELECT.__name__}," \
+             f"CROSSOVER-{CROSSOVER.__name__},MUTATION- {MUTATION.__name__},CO_P- {CO_P},MU_P- {MU_P},DATETIME- {datetime.now().strftime('%Y_%m_%d-%I_%M_%S_%p')} "
+
+for i in range(N_TRIES):
 
     pop = Population(
-        size=1000,
+        size=SIZE,
         sol_size=len(distance_matrix[0]) - 1,
         valid_set=[i for i in range(0, len(distance_matrix[0])) if i is not DEPOT],
         replacement=False,
-        optim="min",
-        n_trucks=5,
+        optim=OPTIM,
+        n_trucks=N_TRUCKS,
     )
 
     fitness_info, best_individual = pop.evolve(
-        gens=600,
-        select=tournament,
-        crossover=multipoint_crossover,
-        mutate=inversion_mutation,
+        gens=GENS,
+        select=SELECT,
+        crossover=CROSSOVER,
+        mutate=MUTATION,
         reparations=reparations,
-        co_p=0.8,
-        mu_p=0.3,
+        co_p=CO_P,
+        mu_p=MU_P,
         elitism=True
     )
 
     best_individuals.append(best_individual)
     plt.plot(fitness_info)
-    plt.ylabel("Fitness")
-    plt.xlabel("Genes")
+
+
+plt.ylabel("Fitness")
+plt.xlabel("Genes")
+plt.savefig(f"plots/{image_name}.png")
+
+
 
 for ind in best_individuals:
     print(ind)
