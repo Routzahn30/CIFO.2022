@@ -84,7 +84,8 @@ for i in range(N):
     best_individuals.append(best_individual)
     plt.plot(fitness_info)
 
-plt.show()
-
 for ind in best_individuals:
     print(ind)
+
+plt.show()
+
