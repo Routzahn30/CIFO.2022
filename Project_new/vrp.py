@@ -56,7 +56,7 @@ pop = Population(
     sol_size=len(distance_matrix[0])-1,
     valid_set=[i for i in range(0,len(distance_matrix[0])) if i is not DEPOT],
     replacement=False,
-    optim="max",
+    optim="min",
     n_trucks=3,
 )
 

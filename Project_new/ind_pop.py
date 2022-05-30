@@ -108,6 +108,7 @@ class Population:
 
                 if self.optim == "max":
                     print(f'Best Individual: {max(self, key=attrgetter("fitness"))}')
+                    fitness_info.append(min(self,key=attrgetter("fitness")).fitness)
                 elif self.optim == "min":
                     print(f'Best Individual: {min(self, key=attrgetter("fitness"))}')
                     fitness_info.append(min(self,key=attrgetter("fitness")).fitness)
