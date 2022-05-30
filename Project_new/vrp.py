@@ -74,8 +74,6 @@ MUTATION = inversion_mutation
 CO_P = 0.8
 MU_P = 0.3
 
-image_name = f"N_tries- {N_TRIES},SIZE- {SIZE},N_TRUCKS- {N_TRUCKS},GENES- {GENS},SELECT- {SELECT.__name__}," \
-             f"CROSSOVER-{CROSSOVER.__name__},MUTATION- {MUTATION.__name__},CO_P- {CO_P},MU_P- {MU_P},DATETIME- {datetime.now().strftime('%Y_%m_%d-%I_%M_%S_%p')} "
 
 for i in range(N_TRIES):
 
@@ -102,6 +100,9 @@ for i in range(N_TRIES):
     best_individuals.append(best_individual)
     plt.plot(fitness_info)
 
+image_name = f"N_tries- {N_TRIES},SIZE- {SIZE},N_TRUCKS- {N_TRUCKS},GENES- {GENS},SELECT- {SELECT.__name__}," \
+             f"CROSSOVER-{CROSSOVER.__name__},MUTATION- {MUTATION.__name__},CO_P- {CO_P},MU_P- {MU_P}," \
+             f"DATETIME- {datetime.now().strftime('%Y_%m_%d-%I_%M_%S_%p')} "
 
 plt.ylabel("Fitness")
 plt.xlabel("Genes")
