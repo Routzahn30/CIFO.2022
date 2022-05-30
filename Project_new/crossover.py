@@ -86,6 +86,7 @@ def cycle_co(p1, p2):
     # Offspring placeholders - None values make it easy to debug for errors
     offspring1 = [None] * len(p1)
     offspring2 = [None] * len(p2)
+
     # While there are still None values in offspring, get the first index of
     # None and start a "cycle" according to the cycle crossover method
     while None in offspring1:
@@ -108,6 +109,46 @@ def cycle_co(p1, p2):
                     offspring2[index] = p1[index]
 
     return offspring1, offspring2
+
+def uniform_crossover(p1, p2, n_trucks):
+
+    p1_flat = [item for sublist in p1.representation for item in sublist]
+    p2_flat = [item for sublist in p2.representation for item in sublist]
+    dividers = np.sort(np.append(random.sample(range(1, len(p1_flat) - 2), n_trucks - 1), len(p1_flat)))
+
+    offspring_1 = []
+    offspring_2 = []
+    number_list = [0,1]
+    # random item from list
+    #print(random.choice(number_list))
+    ran = []
+    for i in range(0,len(p1_flat) ):
+        aux = 0
+        to_switch = random.choice(number_list)
+        ran.append(to_switch)
+        if to_switch == 0 :
+    #         if p1_flat[i] not in p2_flat :
+            aux = p1_flat[i]
+            p1_flat[i] = p2_flat[i]
+            p2_flat[i] = aux
+    dividers = np.sort(np.append(random.sample(range(1, len(p1_flat) - 2), n_trucks - 1), len(p1_flat)))
+    offspring_1 = []
+    offspring_2 = []
+    i = 0
+    for index, point in enumerate(dividers):
+        p1_section = p1_flat[i:point]
+        p2_section = p2_flat[i:point]
+
+        if index % 2 == 0:
+            offspring_1.append(p1_section)
+            offspring_2.append(p2_section)
+        else:
+            offspring_1.append(p2_section)
+            offspring_2.append(p1_section)
+
+        i = point
+
+    return offspring_1,offspring_2
 
 
 def pmx_co(p1, p2):

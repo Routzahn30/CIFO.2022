@@ -1,4 +1,3 @@
-import chromossome
 import crossover
 import random
 import numpy as np
@@ -6,16 +5,16 @@ from itertools import islice
 from random import randint
 from crossover import multipoint_crossover
 from mutation import swap_mutation
-from data.vrp_data import distance_matrix
-from data.data_vrp_bangladesh import distance_matrix as bangladesh_distance_matrix
+#from data.vrp_data import distance_matrix
+from data.data_vrp_bangladesh import distance_matrix as distance_matrix
 from ind_pop import Population, Individual
 from selection import tournament, fps, rank
-from crossover import multipoint_crossover, single_point_co
+from crossover import multipoint_crossover, single_point_co, uniform_crossover
 from mutation import swap_mutation, inversion_mutation, scramble_mutation
 from reparations import reparations
 
 
-DEPOT = 4
+DEPOT = 0
 
 
 def get_fitness(self):
@@ -62,8 +61,8 @@ pop = Population(
 
 pop.evolve(
     gens=100,
-    select=rank,
-    crossover=multipoint_crossover,
+    select=tournament,
+    crossover=uniform_crossover,
     mutate=inversion_mutation,
     reparations=reparations,
     co_p=0.9,

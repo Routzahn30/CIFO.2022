@@ -25,6 +25,7 @@ def tournament(population, size=10):
     else:
         raise Exception("No optimization specified (min or max).")
 
+
 def rank(population):
     if population.optim == "max":
         individuals = population.individuals
