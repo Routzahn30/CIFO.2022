@@ -35,4 +35,4 @@ def reparations(p, valid_set):
 if __name__ == "__main__":
     valid_set = [i for i in range(1, len(distance_matrix[0]))]
     test = [[12, 1, 11, 8, 4, 2, 2], [7], [3, 5, 7, 7]]
-    reparations(test, valid_set)
+    print(reparations(test, valid_set))
